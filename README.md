@@ -1,7 +1,7 @@
 # MoonBit ITOA Library
 
-Fast integer-to-string conversion library for MoonBit, inspired by Rust's `itoa`
-crate.
+Fast integer-to-string conversion library for MoonBit, inspired by Rust's
+[`itoa`](https://github.com/dtolnay/itoa) crate.
 
 ## Features
 

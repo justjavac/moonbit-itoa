@@ -1,3 +1,6 @@
+// This file is port from https://github.com/dtolnay/itoa/blob/1ca7e009a324b9ef35c0d519a87ca90d5b6597fe/src/lib.rs
+// Copyright Apache-2.0 dtolnay. All rights reserved.
+
 /// Fast conversion of integer primitives to decimal strings.
 /// 
 /// This implementation provides efficient integer-to-string conversion
