@@ -1,0 +1,16 @@
+{
+  "name": "justjavac/itoa",
+  "version": "0.1.0",
+  "readme": "README.md",
+  "repository": "https://github.com/justjavac/moonbit-itoa",
+  "license": "MIT",
+  "keywords": [
+    "itoa",
+    "conversion",
+    "integer",
+    "bytes",
+    "utility"
+  ],
+  "description": "an utility for converting integers to bytes",
+  "source": "src"
+}
