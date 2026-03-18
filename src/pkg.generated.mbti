@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "justjavac/itoa"
+
+// Values
+pub fn udivmod_1e19(UInt64) -> (UInt64, UInt64)
+
+// Errors
+
+// Types and methods
+pub struct Buffer {
+  bytes : FixedArray[Byte]
+}
+pub fn Buffer::format_i32(Self, Int) -> String
+pub fn Buffer::format_i64(Self, Int64) -> String
+pub fn Buffer::format_u32(Self, UInt) -> String
+pub fn Buffer::format_u64(Self, UInt64) -> String
+pub fn Buffer::new() -> Self
+
+// Type aliases
+
+// Traits
+

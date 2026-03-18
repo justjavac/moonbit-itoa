@@ -1,4 +1,5 @@
-///| Comprehensive test cases for the itoa library
+///|
+/// Comprehensive test cases for the itoa library
 test "test_basic_formatting" {
   let buffer = Buffer::new()
 

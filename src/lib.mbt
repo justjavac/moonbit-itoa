@@ -14,18 +14,21 @@
 /// inspect(printed, content="128")
 /// ```
 
-///| A correctly sized stack allocation for the formatted integer to be written into.
+///|
+/// A correctly sized stack allocation for the formatted integer to be written into.
 pub struct Buffer {
   bytes : FixedArray[Byte]
 }
 
-///| Create a new buffer for integer formatting.
+///|
+/// Create a new buffer for integer formatting.
 /// This is a cheap operation; you don't need to worry about reusing buffers for efficiency.
 pub fn Buffer::new() -> Buffer {
   { bytes: FixedArray::make(40, b'\x00') } // Max size for i128 is 40 chars
 }
 
-///| Print an Int into this buffer and return a string representation.
+///|
+/// Print an Int into this buffer and return a string representation.
 pub fn Buffer::format_i32(self : Buffer, i : Int) -> String {
   let _ = self // Use self parameter
   let buf = FixedArray::make(11, b'\x00') // i32 max length is 11
@@ -33,7 +36,8 @@ pub fn Buffer::format_i32(self : Buffer, i : Int) -> String {
   bytes_to_string(result)
 }
 
-///| Print a UInt into this buffer and return a string representation.
+///|
+/// Print a UInt into this buffer and return a string representation.
 pub fn Buffer::format_u32(self : Buffer, i : UInt) -> String {
   let _ = self // Use self parameter
   let buf = FixedArray::make(10, b'\x00') // u32 max length is 10
@@ -41,7 +45,8 @@ pub fn Buffer::format_u32(self : Buffer, i : UInt) -> String {
   bytes_to_string(result)
 }
 
-///| Print an Int64 into this buffer and return a string representation.
+///|
+/// Print an Int64 into this buffer and return a string representation.
 pub fn Buffer::format_i64(self : Buffer, i : Int64) -> String {
   let _ = self // Use self parameter
   let buf = FixedArray::make(20, b'\x00') // i64 max length is 20
@@ -49,7 +54,8 @@ pub fn Buffer::format_i64(self : Buffer, i : Int64) -> String {
   bytes_to_string(result)
 }
 
-///| Print a UInt64 into this buffer and return a string representation.
+///|
+/// Print a UInt64 into this buffer and return a string representation.
 pub fn Buffer::format_u64(self : Buffer, i : UInt64) -> String {
   let _ = self // Use self parameter
   let buf = FixedArray::make(20, b'\x00') // u64 max length is 20
@@ -57,7 +63,8 @@ pub fn Buffer::format_u64(self : Buffer, i : UInt64) -> String {
   bytes_to_string(result)
 }
 
-///| Convert byte array to string
+///|
+/// Convert byte array to string
 fn bytes_to_string(bytes : Array[Byte]) -> String {
   let chars = Array::make(bytes.length(), '\u0000')
   for i in 0..<bytes.length() {
@@ -69,7 +76,8 @@ fn bytes_to_string(bytes : Array[Byte]) -> String {
   String::from_array(chars)
 }
 
-///| Lookup table for decimal digits (00, 01, 02, ..., 99)
+///|
+/// Lookup table for decimal digits (00, 01, 02, ..., 99)
 let dec_digits_lut : FixedArray[Byte] = [
   b'0', b'0', b'0', b'1', b'0', b'2', b'0', b'3', b'0', b'4', b'0', b'5', b'0', b'6',
   b'0', b'7', b'0', b'8', b'0', b'9', b'1', b'0', b'1', b'1', b'1', b'2', b'1', b'3',
@@ -88,7 +96,8 @@ let dec_digits_lut : FixedArray[Byte] = [
   b'9', b'8', b'9', b'9',
 ]
 
-///| Write an Int32 to the buffer and return the byte array slice
+///|
+/// Write an Int32 to the buffer and return the byte array slice
 fn write_i32(value : Int, buf : FixedArray[Byte]) -> Array[Byte] {
   let is_nonnegative = value >= 0
   let mut n = if is_nonnegative {
@@ -142,7 +151,8 @@ fn write_i32(value : Int, buf : FixedArray[Byte]) -> Array[Byte] {
   result
 }
 
-///| Write a UInt32 to the buffer and return the byte array slice
+///|
+/// Write a UInt32 to the buffer and return the byte array slice
 fn write_u32(value : UInt, buf : FixedArray[Byte]) -> Array[Byte] {
   let mut n = value
   let mut curr = buf.length()
@@ -187,7 +197,8 @@ fn write_u32(value : UInt, buf : FixedArray[Byte]) -> Array[Byte] {
   result
 }
 
-///| Write an Int64 to the buffer and return the byte array slice
+///|
+/// Write an Int64 to the buffer and return the byte array slice
 fn write_i64(value : Int64, buf : FixedArray[Byte]) -> Array[Byte] {
   let is_nonnegative = value >= 0L
   let mut n = if is_nonnegative {
@@ -241,7 +252,8 @@ fn write_i64(value : Int64, buf : FixedArray[Byte]) -> Array[Byte] {
   result
 }
 
-///| Write a UInt64 to the buffer and return the byte array slice
+///|
+/// Write a UInt64 to the buffer and return the byte array slice
 fn write_u64(value : UInt64, buf : FixedArray[Byte]) -> Array[Byte] {
   let mut n = value
   let mut curr = buf.length()
@@ -286,7 +298,8 @@ fn write_u64(value : UInt64, buf : FixedArray[Byte]) -> Array[Byte] {
   result
 }
 
-///| Additional test cases for edge conditions
+///|
+/// Additional test cases for edge conditions
 test "test_zero_values" {
   let buffer = Buffer::new()
   inspect(buffer.format_i32(0), content="0")

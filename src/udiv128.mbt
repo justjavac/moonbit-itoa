@@ -1,7 +1,8 @@
 // This file is port from https://github.com/dtolnay/itoa/blob/1ca7e009a324b9ef35c0d519a87ca90d5b6597fe/src/udiv128.rs
 // Copyright Apache-2.0 dtolnay. All rights reserved.
 
-///| Multiply unsigned 64 bit integers, return upper 64 bits of the result
+///|
+/// Multiply unsigned 64 bit integers, return upper 64 bits of the result
 fn u64_mulhi(x : UInt64, y : UInt64) -> UInt64 {
   let x_lo = x & 0xFFFFFFFFUL
   let x_hi = x >> 32
@@ -17,7 +18,8 @@ fn u64_mulhi(x : UInt64, y : UInt64) -> UInt64 {
   x_hi * y_hi + high1 + high2
 }
 
-///| Divide `n` by 1e19 and return quotient and remainder
+///|
+/// Divide `n` by 1e19 and return quotient and remainder
 ///
 /// Integer division algorithm is based on the following paper:
 ///
