@@ -1,70 +1,122 @@
 // This file is port from https://github.com/dtolnay/itoa/blob/1ca7e009a324b9ef35c0d519a87ca90d5b6597fe/src/lib.rs
 // Copyright Apache-2.0 dtolnay. All rights reserved.
 
-/// Fast conversion of integer primitives to decimal strings.
-/// 
-/// This implementation provides efficient integer-to-string conversion
-/// without going through formatting overhead.
+///|
+/// Reusable scratch space for formatting integers as decimal strings.
+///
+/// A `Buffer` keeps an internal byte array large enough for every supported
+/// integer type, so repeated formatting calls can reuse the same working
+/// memory instead of allocating a fresh temporary buffer each time.
 ///
 /// # Example
-///
-/// ```moonbit
-/// let buffer = Buffer::new()
-/// let printed = buffer.format_u64(128UL)
-/// inspect(printed, content="128")
+/// ```mbt check
+/// test "buffer can be reused" {
+///   let buffer = Buffer::new()
+///   inspect(buffer.format_i32(-42), content="-42")
+///   inspect(buffer.format_u64(9000UL), content="9000")
+/// }
 /// ```
-
-///|
-/// A correctly sized stack allocation for the formatted integer to be written into.
 pub struct Buffer {
   bytes : FixedArray[Byte]
 }
 
 ///|
-/// Create a new buffer for integer formatting.
-/// This is a cheap operation; you don't need to worry about reusing buffers for efficiency.
+/// Create a reusable decimal formatting buffer.
+///
+/// The returned buffer is large enough for every integer type supported by
+/// this package, including `UInt64` and the negative boundary of `Int64`.
+///
+/// # Example
+/// ```mbt check
+/// test "create buffer" {
+///   let buffer = Buffer::new()
+///   inspect(buffer.format_u32(7U), content="7")
+/// }
+/// ```
 pub fn Buffer::new() -> Buffer {
-  { bytes: FixedArray::make(40, b'\x00') } // Max size for i128 is 40 chars
+  { bytes: FixedArray::make(20, b'\x00') }
 }
 
 ///|
-/// Print an Int into this buffer and return a string representation.
+/// Format an `Int` as a base-10 string.
+///
+/// The conversion writes digits into the buffer's reusable scratch space and
+/// returns a freshly allocated `String` containing the final decimal text.
+///
+/// # Example
+/// ```mbt check
+/// test "format signed 32-bit value" {
+///   let buffer = Buffer::new()
+///   inspect(buffer.format_i32(-2147483648), content="-2147483648")
+/// }
+/// ```
 pub fn Buffer::format_i32(self : Buffer, i : Int) -> String {
-  let _ = self // Use self parameter
-  let buf = FixedArray::make(11, b'\x00') // i32 max length is 11
-  let result = write_i32(i, buf)
+  let result = write_i32(i, self.bytes)
   bytes_to_string(result)
 }
 
 ///|
-/// Print a UInt into this buffer and return a string representation.
+/// Format a `UInt` as a base-10 string.
+///
+/// This method is optimized for unsigned 32-bit values and avoids any sign
+/// handling while still reusing the same internal working buffer.
+///
+/// # Example
+/// ```mbt check
+/// test "format unsigned 32-bit value" {
+///   let buffer = Buffer::new()
+///   inspect(buffer.format_u32(4294967295U), content="4294967295")
+/// }
+/// ```
 pub fn Buffer::format_u32(self : Buffer, i : UInt) -> String {
-  let _ = self // Use self parameter
-  let buf = FixedArray::make(10, b'\x00') // u32 max length is 10
-  let result = write_u32(i, buf)
+  let result = write_u32(i, self.bytes)
   bytes_to_string(result)
 }
 
 ///|
-/// Print an Int64 into this buffer and return a string representation.
+/// Format an `Int64` as a base-10 string.
+///
+/// Negative values are handled by emitting the sign separately and then using
+/// the fast digit-pair algorithm for the remaining absolute value.
+///
+/// # Example
+/// ```mbt check
+/// test "format signed 64-bit value" {
+///   let buffer = Buffer::new()
+///   inspect(
+///     buffer.format_i64(-1234567890123456789L),
+///     content="-1234567890123456789",
+///   )
+/// }
+/// ```
 pub fn Buffer::format_i64(self : Buffer, i : Int64) -> String {
-  let _ = self // Use self parameter
-  let buf = FixedArray::make(20, b'\x00') // i64 max length is 20
-  let result = write_i64(i, buf)
+  let result = write_i64(i, self.bytes)
   bytes_to_string(result)
 }
 
 ///|
-/// Print a UInt64 into this buffer and return a string representation.
+/// Format a `UInt64` as a base-10 string.
+///
+/// This is the widest integer conversion supported by the package and can
+/// render values all the way up to `18446744073709551615`.
+///
+/// # Example
+/// ```mbt check
+/// test "format unsigned 64-bit value" {
+///   let buffer = Buffer::new()
+///   inspect(
+///     buffer.format_u64(18446744073709551615UL),
+///     content="18446744073709551615",
+///   )
+/// }
+/// ```
 pub fn Buffer::format_u64(self : Buffer, i : UInt64) -> String {
-  let _ = self // Use self parameter
-  let buf = FixedArray::make(20, b'\x00') // u64 max length is 20
-  let result = write_u64(i, buf)
+  let result = write_u64(i, self.bytes)
   bytes_to_string(result)
 }
 
 ///|
-/// Convert byte array to string
+/// Convert ASCII digit bytes into a `String`.
 fn bytes_to_string(bytes : Array[Byte]) -> String {
   let chars = Array::make(bytes.length(), '\u0000')
   for i in 0..<bytes.length() {
@@ -97,7 +149,7 @@ let dec_digits_lut : FixedArray[Byte] = [
 ]
 
 ///|
-/// Write an Int32 to the buffer and return the byte array slice
+/// Encode a signed 32-bit integer into the tail of `buf`.
 fn write_i32(value : Int, buf : FixedArray[Byte]) -> Array[Byte] {
   let is_nonnegative = value >= 0
   let mut n = if is_nonnegative {
@@ -139,7 +191,7 @@ fn write_i32(value : Int, buf : FixedArray[Byte]) -> Array[Byte] {
     buf[curr] = dec_digits_lut[d1]
     buf[curr + 1] = dec_digits_lut[d1 + 1]
   }
-  if not(is_nonnegative) {
+  if !is_nonnegative {
     curr = curr - 1
     buf[curr] = b'-'
   }
@@ -152,7 +204,7 @@ fn write_i32(value : Int, buf : FixedArray[Byte]) -> Array[Byte] {
 }
 
 ///|
-/// Write a UInt32 to the buffer and return the byte array slice
+/// Encode an unsigned 32-bit integer into the tail of `buf`.
 fn write_u32(value : UInt, buf : FixedArray[Byte]) -> Array[Byte] {
   let mut n = value
   let mut curr = buf.length()
@@ -198,7 +250,7 @@ fn write_u32(value : UInt, buf : FixedArray[Byte]) -> Array[Byte] {
 }
 
 ///|
-/// Write an Int64 to the buffer and return the byte array slice
+/// Encode a signed 64-bit integer into the tail of `buf`.
 fn write_i64(value : Int64, buf : FixedArray[Byte]) -> Array[Byte] {
   let is_nonnegative = value >= 0L
   let mut n = if is_nonnegative {
@@ -240,7 +292,7 @@ fn write_i64(value : Int64, buf : FixedArray[Byte]) -> Array[Byte] {
     buf[curr] = dec_digits_lut[d1]
     buf[curr + 1] = dec_digits_lut[d1 + 1]
   }
-  if not(is_nonnegative) {
+  if !is_nonnegative {
     curr = curr - 1
     buf[curr] = b'-'
   }
@@ -253,7 +305,7 @@ fn write_i64(value : Int64, buf : FixedArray[Byte]) -> Array[Byte] {
 }
 
 ///|
-/// Write a UInt64 to the buffer and return the byte array slice
+/// Encode an unsigned 64-bit integer into the tail of `buf`.
 fn write_u64(value : UInt64, buf : FixedArray[Byte]) -> Array[Byte] {
   let mut n = value
   let mut curr = buf.length()

@@ -1,7 +1,7 @@
 {
   "name": "justjavac/itoa",
-  "version": "0.2.0",
-  "readme": "README.md",
+  "version": "0.2.2",
+  "readme": "README.mbt.md",
   "repository": "https://github.com/justjavac/moonbit-itoa",
   "license": "MIT",
   "keywords": [
@@ -11,6 +11,6 @@
     "bytes",
     "utility"
   ],
-  "description": "an utility for converting integers to bytes",
+  "description": "Fast decimal formatting for signed and unsigned integers",
   "source": "src"
 }
