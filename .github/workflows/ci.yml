@@ -32,10 +32,9 @@ jobs:
         run: |
           moon version --all
 
-      - name: moon install
+      - name: moon update
         run: |
           moon update
-          moon install
 
       - name: moon check
         run: moon check --deny-warn
@@ -48,9 +47,18 @@ jobs:
         run: |
           moon test
 
-      - name: moon test --doc
+      - name: coverage
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
-          moon test --doc
+          moon test --target native --enable-coverage
+          moon coverage analyze -p justjavac/itoa -- -f cobertura -o coverage.xml
+
+      - name: upload coverage
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.xml
+          disable_search: true
 
       - name: moon build
         run: |
@@ -86,10 +94,9 @@ jobs:
         run: |
           moon version --all
 
-      - name: moon install
+      - name: moon update
         run: |
           moon update
-          moon install
 
       - name: moon check
         run: moon check --deny-warn
@@ -101,10 +108,6 @@ jobs:
       - name: Run moon test
         run: |
           moon test
-
-      - name: moon test --doc
-        run: |
-          moon test --doc
 
       - name: moon build
         run: |

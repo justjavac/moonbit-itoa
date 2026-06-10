@@ -1,5 +1,7 @@
 # `justjavac/itoa`
 
+[![coverage](https://img.shields.io/codecov/c/github/justjavac/moonbit-itoa/main?label=coverage)](https://codecov.io/gh/justjavac/moonbit-itoa)
+
 Fast decimal formatting for `Int`, `UInt`, `Int64`, and `UInt64`, inspired by
 Rust's [`itoa`](https://github.com/dtolnay/itoa) crate.
 

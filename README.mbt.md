@@ -1,5 +1,7 @@
 # `justjavac/itoa`
 
+[![coverage](https://img.shields.io/codecov/c/github/justjavac/moonbit-itoa/main?label=coverage)](https://codecov.io/gh/justjavac/moonbit-itoa)
+
 Small and fast decimal formatting for `Int`, `UInt`, `Int64`, and `UInt64`.
 
 ## Install

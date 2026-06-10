@@ -1,4 +1,5 @@
 _build/
 target/
 .mooncakes/
+coverage.xml
 .DS_Store
