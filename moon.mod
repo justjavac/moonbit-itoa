@@ -12,6 +12,4 @@ keywords = [ "itoa", "conversion", "integer", "bytes", "utility" ]
 
 description = "Fast decimal formatting for signed and unsigned integers"
 
-options(
-  source: "src",
-)
+source = "src"
