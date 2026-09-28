@@ -11,7 +11,7 @@
 /// # Example
 /// ```mbt check
 /// test "buffer can be reused" {
-///   let buffer = Buffer::new()
+///   let buffer = @itoa.Buffer::new()
 ///   inspect(buffer.format_i32(-42), content="-42")
 ///   inspect(buffer.format_u64(9000UL), content="9000")
 /// }
@@ -29,7 +29,7 @@ pub struct Buffer {
 /// # Example
 /// ```mbt check
 /// test "create buffer" {
-///   let buffer = Buffer::new()
+///   let buffer = @itoa.Buffer::new()
 ///   inspect(buffer.format_u32(7U), content="7")
 /// }
 /// ```
@@ -46,7 +46,7 @@ pub fn Buffer::new() -> Buffer {
 /// # Example
 /// ```mbt check
 /// test "format signed 32-bit value" {
-///   let buffer = Buffer::new()
+///   let buffer = @itoa.Buffer::new()
 ///   inspect(buffer.format_i32(-2147483648), content="-2147483648")
 /// }
 /// ```
@@ -64,7 +64,7 @@ pub fn Buffer::format_i32(self : Buffer, i : Int) -> String {
 /// # Example
 /// ```mbt check
 /// test "format unsigned 32-bit value" {
-///   let buffer = Buffer::new()
+///   let buffer = @itoa.Buffer::new()
 ///   inspect(buffer.format_u32(4294967295U), content="4294967295")
 /// }
 /// ```
@@ -82,7 +82,7 @@ pub fn Buffer::format_u32(self : Buffer, i : UInt) -> String {
 /// # Example
 /// ```mbt check
 /// test "format signed 64-bit value" {
-///   let buffer = Buffer::new()
+///   let buffer = @itoa.Buffer::new()
 ///   inspect(
 ///     buffer.format_i64(-1234567890123456789L),
 ///     content="-1234567890123456789",
@@ -103,7 +103,7 @@ pub fn Buffer::format_i64(self : Buffer, i : Int64) -> String {
 /// # Example
 /// ```mbt check
 /// test "format unsigned 64-bit value" {
-///   let buffer = Buffer::new()
+///   let buffer = @itoa.Buffer::new()
 ///   inspect(
 ///     buffer.format_u64(18446744073709551615UL),
 ///     content="18446744073709551615",

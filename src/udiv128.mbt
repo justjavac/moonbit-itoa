@@ -10,7 +10,7 @@
 /// # Example
 /// ```mbt check
 /// test "split by 1e19" {
-///   let (quot, rem) = udivmod_1e19(18446744073709551615UL)
+///   let (quot, rem) = @itoa.udivmod_1e19(18446744073709551615UL)
 ///   inspect(quot, content="1")
 ///   inspect(rem, content="8446744073709551615")
 /// }
