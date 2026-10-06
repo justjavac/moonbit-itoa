@@ -36,17 +36,3 @@ test "reuse the same buffer" {
   inspect(buffer.format_i64(-9000000000000L), content="-9000000000000")
 }
 ```
-
-## Low-level Helper
-
-`udivmod_1e19` splits a `UInt64` into a high chunk and a low 19-digit
-remainder.
-
-```mbt check
-///|
-test "split a large unsigned integer" {
-  let (quot, rem) = @itoa.udivmod_1e19(18446744073709551615UL)
-  inspect(quot, content="1")
-  inspect(rem, content="8446744073709551615")
-}
-```

@@ -2,7 +2,6 @@
 package "justjavac/itoa"
 
 // Values
-pub fn udivmod_1e19(UInt64) -> (UInt64, UInt64)
 
 // Errors
 
@@ -19,4 +18,3 @@ pub fn Buffer::new() -> Self
 // Type aliases
 
 // Traits
-

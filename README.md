@@ -30,7 +30,6 @@ println(unsigned) // "18446744073709551615"
 - `Buffer::format_u32()`
 - `Buffer::format_i64()`
 - `Buffer::format_u64()`
-- `udivmod_1e19()` for low-level `UInt64` splitting by `10^19`
 
 ## Notes
 
