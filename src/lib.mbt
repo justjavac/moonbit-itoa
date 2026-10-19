@@ -34,7 +34,7 @@ pub struct Buffer {
 /// }
 /// ```
 pub fn Buffer::new() -> Buffer {
-  { bytes: FixedArray::make(20, b'\x00') }
+  { bytes: FixedArray::make(20, b'\x00'), }
 }
 
 ///|
@@ -50,7 +50,7 @@ pub fn Buffer::new() -> Buffer {
 ///   inspect(buffer.format_i32(-2147483648), content="-2147483648")
 /// }
 /// ```
-pub fn Buffer::format_i32(self : Buffer, i : Int) -> String {
+pub fn Buffer::format_i32(self : Buffer, i : Int32) -> String {
   let result = write_i32(i, self.bytes)
   bytes_to_string(result)
 }
@@ -68,7 +68,7 @@ pub fn Buffer::format_i32(self : Buffer, i : Int) -> String {
 ///   inspect(buffer.format_u32(4294967295U), content="4294967295")
 /// }
 /// ```
-pub fn Buffer::format_u32(self : Buffer, i : UInt) -> String {
+pub fn Buffer::format_u32(self : Buffer, i : UInt32) -> String {
   let result = write_u32(i, self.bytes)
   bytes_to_string(result)
 }
@@ -150,7 +150,7 @@ let dec_digits_lut : FixedArray[Byte] = [
 
 ///|
 /// Encode a signed 32-bit integer into the tail of `buf`.
-fn write_i32(value : Int, buf : FixedArray[Byte]) -> Array[Byte] {
+fn write_i32(value : Int32, buf : FixedArray[Byte]) -> Array[Byte] {
   let is_nonnegative = value >= 0
   let mut n = if is_nonnegative {
     value.reinterpret_as_uint()
@@ -205,7 +205,7 @@ fn write_i32(value : Int, buf : FixedArray[Byte]) -> Array[Byte] {
 
 ///|
 /// Encode an unsigned 32-bit integer into the tail of `buf`.
-fn write_u32(value : UInt, buf : FixedArray[Byte]) -> Array[Byte] {
+fn write_u32(value : UInt32, buf : FixedArray[Byte]) -> Array[Byte] {
   let mut n = value
   let mut curr = buf.length()
 
